@@ -13,8 +13,8 @@ SITE = "https://www.knotandrune.com/"
 # Email sign-up. Create a Google Form with one "Email" question, then paste its
 # formResponse URL and the email field's entry id here and rebuild.
 # Until both are filled in, the sign-up box says sign-ups open soon.
-SIGNUP_FORM_ACTION = ""      # e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
-SIGNUP_EMAIL_ENTRY = ""      # e.g. entry.123456789
+SIGNUP_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScdY_EC4-Mk2mtf2GYNGiBjrJjCQNTS5kVH1RhaqPq5ZFfNpQ/formResponse"      # e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
+SIGNUP_EMAIL_ENTRY = "entry.1439010666"      # e.g. entry.123456789
 
 PAGES = [
     # file, nav label, <title>, meta description
