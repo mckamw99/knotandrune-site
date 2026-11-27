@@ -4,6 +4,7 @@ Each page body lives in src/<name>.html. This script wraps every body with the
 shared header and footer and writes the finished page to the site root.
 Run:  python3 build.py
 """
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -24,6 +25,8 @@ PAGES = [
      "The Celtic Tree Zodiac and the Knot & Rune line-up of adult and Wee Knot coloring books."),
     ("free-pages.html", "Free Pages", "Free Coloring Pages | Knot & Rune",
      "Free printable coloring pages from Knot & Rune books, sent by email."),
+    ("the-sealed-glen.html", "The Sealed Glen", "The Sealed Glen | A story in letters from Knot & Rune",
+     "The Sealed Glen is a Highland story told in monthly letters by mail. Story One, The Gold in the Kyle, is set on the north coast of Scotland in 1746. Coming 2027."),
     ("lore.html", "Lore", "Lore | Knot & Rune",
      "Short, sourced pieces on Ogham, the tree calendar and the Norse-Gael north."),
     ("about.html", "About", "About | Knot & Rune",
@@ -58,7 +61,7 @@ FOOTER = """<footer class="site-footer">
       </div>
       <div>
         <h4>Explore</h4>
-        <ul><li><a href="books.html">Books</a></li><li><a href="free-pages.html">Free coloring pages</a></li><li><a href="lore.html">Lore</a></li><li><a href="about.html">About</a></li></ul>
+        <ul><li><a href="books.html">Books</a></li><li><a href="the-sealed-glen.html">The Sealed Glen</a></li><li><a href="free-pages.html">Free coloring pages</a></li><li><a href="lore.html">Lore</a></li><li><a href="about.html">About</a></li></ul>
       </div>
       <div>
         <h4>Shops &amp; societies</h4>
@@ -80,22 +83,22 @@ FOOTER = """<footer class="site-footer">
       var msg = f.querySelector('.form-msg'), email = f.querySelector('input[type="email"]');
       if (!email.value || !email.checkValidity()) { e.preventDefault(); msg.hidden = false; msg.textContent = 'Please enter a valid email address.'; email.focus(); return; }
       if (!f.getAttribute('action')) { e.preventDefault(); msg.hidden = false; msg.textContent = 'Sign-ups open soon. Please check back at launch.'; return; }
-      setTimeout(function () { f.querySelector('.fields').hidden = true; msg.hidden = false; msg.textContent = 'Thank you. Your free pages are on their way.'; }, 400);
+      setTimeout(function () { f.querySelector('.fields').hidden = true; msg.hidden = false; msg.textContent = f.dataset.thanks; }, 400);
     });
   });
 })();
 </script>"""
 
 
-def signup(form_id):
+def signup(form_id, button="Send me the free pages", thanks="Thank you. Your free pages are on their way."):
     action = f' action="{SIGNUP_FORM_ACTION}" method="POST" target="sink-{form_id}"' if SIGNUP_FORM_ACTION and SIGNUP_EMAIL_ENTRY else ""
     name = SIGNUP_EMAIL_ENTRY or "email"
     sink = f'<iframe name="sink-{form_id}" title="Sign-up submission" hidden></iframe>' if action else ""
-    return f"""<form class="signup-form" id="{form_id}"{action} novalidate>
+    return f"""<form class="signup-form" id="{form_id}"{action} data-thanks="{thanks}" novalidate>
   <div class="fields" style="display:contents">
     <label for="{form_id}-email">Your email</label>
     <input type="email" id="{form_id}-email" name="{name}" autocomplete="email" required placeholder="you@example.com">
-    <button class="btn" type="submit">Send me the free pages</button>
+    <button class="btn" type="submit">{button}</button>
   </div>
   <p class="form-msg" role="status" hidden></p>
 </form>{sink}
@@ -104,7 +107,10 @@ def signup(form_id):
 
 def page(file, title, desc):
     body = (SRC / file).read_text()
-    body = body.replace("{{SIGNUP}}", signup("signup-" + file.split(".")[0]))
+    form_id = "signup-" + file.split(".")[0]
+    body = body.replace("{{SIGNUP}}", signup(form_id))
+    # {{SIGNUP:button text|thank-you message}} customizes the sign-up box for one page.
+    body = re.sub(r"\{\{SIGNUP:([^|}]*)\|([^}]*)\}\}", lambda m: signup(form_id, m[1], m[2]), body)
     canon = SITE + ("" if file == "index.html" else file)
     return f"""<!doctype html>
 <html lang="en">
