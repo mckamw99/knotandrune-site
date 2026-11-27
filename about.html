@@ -27,7 +27,7 @@
   <div class="wrap">
     <a class="brand" href="index.html"><img src="assets/logo-horizontal.svg" alt="Knot &amp; Rune" width="230" height="44"></a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav"><a href="books.html">Books</a><a href="free-pages.html">Free Pages</a><a href="lore.html">Lore</a><a href="about.html" aria-current="page">About</a></nav>
+    <nav class="nav" id="nav"><a href="books.html">Books</a><a href="free-pages.html">Free Pages</a><a href="the-sealed-glen.html">The Sealed Glen</a><a href="lore.html">Lore</a><a href="about.html" aria-current="page">About</a></nav>
   </div>
 </header>
 <main id="main">
@@ -71,7 +71,7 @@
       </div>
       <div>
         <h4>Explore</h4>
-        <ul><li><a href="books.html">Books</a></li><li><a href="free-pages.html">Free coloring pages</a></li><li><a href="lore.html">Lore</a></li><li><a href="about.html">About</a></li></ul>
+        <ul><li><a href="books.html">Books</a></li><li><a href="the-sealed-glen.html">The Sealed Glen</a></li><li><a href="free-pages.html">Free coloring pages</a></li><li><a href="lore.html">Lore</a></li><li><a href="about.html">About</a></li></ul>
       </div>
       <div>
         <h4>Shops &amp; societies</h4>
@@ -93,7 +93,7 @@
       var msg = f.querySelector('.form-msg'), email = f.querySelector('input[type="email"]');
       if (!email.value || !email.checkValidity()) { e.preventDefault(); msg.hidden = false; msg.textContent = 'Please enter a valid email address.'; email.focus(); return; }
       if (!f.getAttribute('action')) { e.preventDefault(); msg.hidden = false; msg.textContent = 'Sign-ups open soon. Please check back at launch.'; return; }
-      setTimeout(function () { f.querySelector('.fields').hidden = true; msg.hidden = false; msg.textContent = 'Thank you. Your free pages are on their way.'; }, 400);
+      setTimeout(function () { f.querySelector('.fields').hidden = true; msg.hidden = false; msg.textContent = f.dataset.thanks; }, 400);
     });
   });
 })();
